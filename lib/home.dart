@@ -10,27 +10,33 @@ class CalculatorScreen extends StatefulWidget {
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String _expression = '';
-  String _result = '';
+String _result = '';
 
-  void _onButtonPressed(String value) {
-    setState(() {
-      if (value == 'C') {
-        _expression = '';
-        _result = '';
-      } else if (value == '=') {
-        try {
-          final expression = Expression.parse(_expression);
-          const evaluator = const ExpressionEvaluator();
-          final result = evaluator.eval(expression, {});
-          _result = ' = $result';
-        } catch (e) {
-          _result = ' Error';
-        }
-      } else {
-        _expression += value;
+void _onButtonPressed(String value) {
+  setState(() {
+    if (value == 'C') {
+      _expression = '';
+      _result = '';
+    } else if (value == '=') {
+      try {
+        final expression = Expression.parse(_expression);
+        const evaluator = ExpressionEvaluator();
+        final result = evaluator.eval(expression, {});
+        _result = ' = $result';
+      } catch (e) {
+        _result = ' Error';
       }
-    });
-  }
+    } else if (value == '^2') {
+      _expression += '^2';
+    } else if (value == '%') {
+      _expression += '%';
+    } else if (value == '√') {
+      _expression += 'sqrt(';
+    } else {
+      _expression += value;
+    }
+  });
+}
 
   @override 
   Widget build(BuildContext context) {
@@ -60,6 +66,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 ...['4', '5', '6', '*'],
                 ...['1', '2', '3', '-'],
                 ...['C', '0', '=', '+'],
+                ...['^2', '%', '√'],
               ].map((value) {
                 return GridTile(
                   child: ElevatedButton(
@@ -72,6 +79,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       value == '-' ? Colors.grey[700] :
                       value == '*' ? Colors.grey[700] :
                       value == '/' ? Colors.grey[700] :
+                      value == '^2' ? Colors.grey[700] :
+                      value == '%' ? Colors.grey[700] :
+                      value == '√' ? Colors.grey[700] :
                       Colors.blue[300],
                       foregroundColor: Colors.white, // Change 'primary' to 'onPrimary'
                     ),
